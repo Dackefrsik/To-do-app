@@ -12,7 +12,7 @@ export default function CurrentList(){
         whatToTrain : string,
         time : string,
         warmUp : string,
-        not : string
+        note : string
     }
 
     const[modalVisible, setModalVisible] = useState(false);
@@ -23,7 +23,6 @@ export default function CurrentList(){
         {label : "Handla", value : "Handla"},
     ]);
     const[selectedTime, selectTime] = useState(new Date());
-    const[isFocus, setIsFocus] = useState(false);
 
     const[tasks, setTasks] = useState<Gym[]>([]);
 
@@ -52,16 +51,23 @@ export default function CurrentList(){
                                     whatToTrain :  whatToTrain,
                                     time : selectedTime.toLocaleTimeString(),
                                     warmUp : warmUp,
-                                    not : note
-                                }
-                                setTasks([...tasks, newTask])
-                                }                                
+                                    note : note
+                                };
+                                setTasks([...tasks, newTask]);
+                                setWhatToTrain("");
+                                setNote("");
+                                setWarmup("");
+                            }                                
                                 }></Button>
                         </View>
                     </View>
                 </>
             )
         }
+    }
+
+    function removeTask(index : number){
+        setTasks(pervTask => pervTask.filter((_, i) => i !== index))
     }
 
     return(
@@ -72,10 +78,24 @@ export default function CurrentList(){
                 </Text>
             </View>
             <View>
-                {tasks.length > 0 ? (tasks.map(i => {
-                    if(i.type === "Gym"){
+                {tasks.length > 0 ? (tasks.map((task, index) => {
+                    if(task.type === "Gym"){
                         return(
-                            <Text key={i.time}>{i.whatToTrain}</Text>
+                            <View key={index} style={styles.taskContainer}>
+                                <View style={styles.left}>
+                                    <Text style={styles.taskContainerTitle}>{task.type}</Text>
+                                    <Text style={styles.taskContainerText} >Muscle Group: {task.whatToTrain}</Text>
+                                    <Text style={styles.taskContainerText} >Tid: {task.time.slice(0,5)}</Text>
+                                    {task.warmUp && (<Text style={styles.taskContainerText} >Warmup{task.warmUp}</Text>)}
+                                    {task.note && (<Text style={styles.taskContainerText} >{task.note}</Text>)}
+                                </View>
+                                <View style={styles.right}>
+                                    <TouchableOpacity onPress={() => removeTask(index)}>
+                                        <Entypo name="circle" size={24} color="white" />
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                            
                         )
                     }
                 })) : (<></>)}
@@ -196,5 +216,37 @@ const styles = StyleSheet.create({
         backgroundColor: "#000000",
         borderRadius: 10, 
         paddingLeft: 10,        
+    },
+
+    taskContainer:{
+        flexDirection: "row",
+        backgroundColor: "#273896ff",
+        margin: 10,
+        borderRadius: 10,
+        padding: 10
+    },
+
+    taskContainerTitle:{
+        color:"#ffffff",
+        fontSize: 20,
+        paddingBottom: 3,
+        borderBottomWidth: 2,
+        borderBottomColor: "#807b7bff", // färg på linjen
+
+    },
+
+    left:{
+        flex: 3,
+    },
+
+    
+    right:{
+        flexDirection: "row-reverse",
+        flex: 1,
+    },
+
+    taskContainerText:{
+        color: "#ffffff",
+        fontSize: 17
     }
 })
