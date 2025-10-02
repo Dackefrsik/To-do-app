@@ -15,6 +15,12 @@ export default function CurrentList(){
         note : string
     }
 
+    interface shoppingList{
+        type : "ShoppingList",
+        whatToGet : string,
+        shoppingList : string;
+    }
+
     const[modalVisible, setModalVisible] = useState(false);
     const[open, setOpen] = useState(false)
     const[selectedTask, setSelectedTask] = useState(null);
@@ -24,11 +30,14 @@ export default function CurrentList(){
     ]);
     const[selectedTime, selectTime] = useState(new Date());
 
-    const[tasks, setTasks] = useState<Gym[]>([]);
+    const[tasks, setTasks] = useState<(Gym | shoppingList)[]>([]);
 
     const[whatToTrain, setWhatToTrain] = useState("");
     const[warmUp, setWarmup] = useState("");
     const[note, setNote] = useState("");
+
+    const[whatToGet, setWhatToGet] = useState("");
+    const[shoppingList, setShoppingList] = useState("");
 
    const renderInput = () => {
         if(selectedTask === "Gym"){
@@ -40,7 +49,7 @@ export default function CurrentList(){
                     is24Hour={true} 
                     display='default'/>
                     <TextInput placeholder='Warme up' placeholderTextColor="#000000"  style={styles.input} value={warmUp} onChangeText={setWarmup}/>
-                    <TextInput placeholder='Note' placeholderTextColor="#000000" style={styles.input} value={note} onChangeText={setNote}/>
+                    <TextInput placeholder='Note' multiline={true} textAlignVertical="top"  placeholderTextColor="#000000" style={[styles.input, {height : 125}]} value={note} onChangeText={setNote}/>
                     <View style={[styles.addTask , {marginTop: 50}]}>
                         <View style={[styles.button, {height : 40}]}>
                             <Button color={"#ffffff"} title='Add task' onPress={() => { 
@@ -61,6 +70,33 @@ export default function CurrentList(){
                                 }></Button>
                         </View>
                     </View>
+                </>
+            )
+        }
+        else if(selectedTask === "Handla"){
+            return(
+                <>
+                    <TextInput placeholder='What to get?' placeholderTextColor="#000000" style={styles.input} value={whatToGet} onChangeText={setWhatToGet}/>
+                    <TextInput placeholder='Shopping list' multiline={true} textAlignVertical="top" placeholderTextColor="#000000" style={[styles.input, {height : 125}]} value={shoppingList} onChangeText={setShoppingList}/>
+                
+                    <View style={[styles.addTask, {marginTop : 50}]}> 
+                        <View style={[styles.button, {height : 40}]}>
+                            <Button color={"#ffffff"} title='Add task' onPress={() => {
+                                setModalVisible(false);
+                                setSelectedTask(null);
+                                const newTask: shoppingList = {
+                                    type : "ShoppingList",
+                                    whatToGet : whatToGet,
+                                    shoppingList : shoppingList
+                                }
+                                setTasks([...tasks, newTask]);
+                                setWhatToGet("");
+                                setShoppingList("");
+                                }
+                            }/>
+                        </View>
+                    </View>
+                
                 </>
             )
         }
@@ -98,6 +134,21 @@ export default function CurrentList(){
                             
                         )
                     }
+                    if(task.type === "ShoppingList"){
+                        return(
+                            <View key={index} style={styles.taskContainer}>
+                                <View style={styles.left}>
+                                    <Text style={styles.taskContainerTitle}>{task.type + " " + task.whatToGet} </Text>
+                                    <Text style={styles.taskContainerText}>{task.shoppingList}</Text>
+                                </View>
+                                <View style={styles.right}>
+                                    <TouchableOpacity onPress={() => removeTask(index)}>
+                                        <Entypo name="circle" size={24} color="white" />
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        )
+                    }
                 })) : (<></>)}
             </View>
             <View style={styles.addTask}>
@@ -113,26 +164,26 @@ export default function CurrentList(){
                     animationType="slide"
                     onRequestClose={() => setModalVisible(false)}>
                     
-                    <View style={styles.modalBackground}>
-                        <View style={styles.modalHeader}>
-                            <Text style={styles.modalHeaderText}>
-                               Add task
-                            </Text>
-                            <TouchableOpacity onPress={() => setModalVisible(false)}><Entypo name="cross" size={40} color="black" /></TouchableOpacity>
-                        </View>
-                        <View style={styles.modalBody}>
-                            <DropDownPicker
-                            open={open}
-                            value={selectedTask}
-                            items={items}
-                            setOpen={setOpen}
-                            setValue={setSelectedTask}
-                            setItems={setItems}
-                            placeholder="Chose task to add" />
-                            {renderInput()}
-                        </View>
+                        <View style={styles.modalBackground}>
+                            <View style={styles.modalHeader}>
+                                <Text style={styles.modalHeaderText}>
+                                Add task
+                                </Text>
+                                <TouchableOpacity onPress={() => setModalVisible(false)}><Entypo name="cross" size={40} color="black" /></TouchableOpacity>
+                            </View>
+                            <View style={styles.modalBody}>
+                                <DropDownPicker
+                                open={open}
+                                value={selectedTask}
+                                items={items}
+                                setOpen={setOpen}
+                                setValue={setSelectedTask}
+                                setItems={setItems}
+                                placeholder="Chose task to add" />
+                                {renderInput()}
+                            </View>
 
-                    </View>
+                        </View>
                        
                     </Modal>
 
