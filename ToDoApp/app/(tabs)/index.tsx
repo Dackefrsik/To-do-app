@@ -1,9 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState} from 'react';
 import {View, Text, StyleSheet, Button, Modal, TouchableOpacity, TextInput} from 'react-native';
 
 import DropDownPicker from 'react-native-dropdown-picker';
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Entypo from '@expo/vector-icons/Entypo';
+
+import GymInput from "./GymInput"
 
 export default function CurrentList(){
 
@@ -43,7 +45,10 @@ export default function CurrentList(){
         if(selectedTask === "Gym"){
             return(
                 <>
-                    <TextInput placeholder='What to train' placeholderTextColor="#000000" style={styles.input} value={whatToTrain} onChangeText={setWhatToTrain}/>
+                    <GymInput selectedTime={selectedTime} setModalVisible={setModalVisible} setSelectedTask={setSelectedTask} setTasks={setTasks} tasks={tasks} setWhatToTrain={setWhatToTrain} setNote={setNote} setWarmup={setWarmup} whatToTrain={whatToTrain}   // <-- Lägg till denna rad
+    warmUp={warmUp}             // <-- Lägg till denna rad
+    note={note} />
+                    {/* <TextInput placeholder='What to train' placeholderTextColor="#000000" style={styles.input} value={whatToTrain} onChangeText={setWhatToTrain}/>
                     <DateTimePicker style={styles.time} testID='dateTimePicker' 
                     value={selectedTime} mode='time' 
                     is24Hour={true} 
@@ -69,7 +74,7 @@ export default function CurrentList(){
                             }                                
                                 }></Button>
                         </View>
-                    </View>
+                    </View> */}
                 </>
             )
         }
