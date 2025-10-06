@@ -1,11 +1,12 @@
 import React, { useState} from 'react';
-import {View, Text, StyleSheet, Button, Modal, TouchableOpacity, TextInput} from 'react-native';
+import {View, Text, StyleSheet, Button, Modal, TouchableOpacity} from 'react-native';
+import styles from '@/style/style';
 
 import DropDownPicker from 'react-native-dropdown-picker';
-import DateTimePicker from "@react-native-community/datetimepicker";
 import Entypo from '@expo/vector-icons/Entypo';
 
-import GymInput from "./GymInput"
+import GymInput from "../innerComponent/GymInput"
+import HandlaInput from '../innerComponent/HandlaInput';
 
 export default function CurrentList(){
 
@@ -44,65 +45,14 @@ export default function CurrentList(){
    const renderInput = () => {
         if(selectedTask === "Gym"){
             return(
-                <>
                     <GymInput selectedTime={selectedTime} setModalVisible={setModalVisible} setSelectedTask={setSelectedTask} setTasks={setTasks} tasks={tasks} setWhatToTrain={setWhatToTrain} setNote={setNote} setWarmup={setWarmup} whatToTrain={whatToTrain}   // <-- Lägg till denna rad
-    warmUp={warmUp}             // <-- Lägg till denna rad
+    warmUp={warmUp}             
     note={note} />
-                    {/* <TextInput placeholder='What to train' placeholderTextColor="#000000" style={styles.input} value={whatToTrain} onChangeText={setWhatToTrain}/>
-                    <DateTimePicker style={styles.time} testID='dateTimePicker' 
-                    value={selectedTime} mode='time' 
-                    is24Hour={true} 
-                    display='default'/>
-                    <TextInput placeholder='Warme up' placeholderTextColor="#000000"  style={styles.input} value={warmUp} onChangeText={setWarmup}/>
-                    <TextInput placeholder='Note' multiline={true} textAlignVertical="top"  placeholderTextColor="#000000" style={[styles.input, {height : 125}]} value={note} onChangeText={setNote}/>
-                    <View style={[styles.addTask , {marginTop: 50}]}>
-                        <View style={[styles.button, {height : 40}]}>
-                            <Button color={"#ffffff"} title='Add task' onPress={() => { 
-                                setModalVisible(false) 
-                                setSelectedTask(null)
-                                const newTask: Gym = {
-                                    type : "Gym",
-                                    whatToTrain :  whatToTrain,
-                                    time : selectedTime.toLocaleTimeString(),
-                                    warmUp : warmUp,
-                                    note : note
-                                };
-                                setTasks([...tasks, newTask]);
-                                setWhatToTrain("");
-                                setNote("");
-                                setWarmup("");
-                            }                                
-                                }></Button>
-                        </View>
-                    </View> */}
-                </>
             )
         }
         else if(selectedTask === "Handla"){
             return(
-                <>
-                    <TextInput placeholder='What to get?' placeholderTextColor="#000000" style={styles.input} value={whatToGet} onChangeText={setWhatToGet}/>
-                    <TextInput placeholder='Shopping list' multiline={true} textAlignVertical="top" placeholderTextColor="#000000" style={[styles.input, {height : 125}]} value={shoppingList} onChangeText={setShoppingList}/>
-                
-                    <View style={[styles.addTask, {marginTop : 50}]}> 
-                        <View style={[styles.button, {height : 40}]}>
-                            <Button color={"#ffffff"} title='Add task' onPress={() => {
-                                setModalVisible(false);
-                                setSelectedTask(null);
-                                const newTask: shoppingList = {
-                                    type : "ShoppingList",
-                                    whatToGet : whatToGet,
-                                    shoppingList : shoppingList
-                                }
-                                setTasks([...tasks, newTask]);
-                                setWhatToGet("");
-                                setShoppingList("");
-                                }
-                            }/>
-                        </View>
-                    </View>
-                
-                </>
+                <HandlaInput whatToGet={whatToGet} setWhatToGet={setWhatToGet} shoppingList={shoppingList} setShoppingList={setShoppingList} setModalVisible={setModalVisible} setSelectedTask={setSelectedTask} setTasks={setTasks} tasks={tasks}/>                
             )
         }
     }
@@ -187,122 +137,10 @@ export default function CurrentList(){
                                 placeholder="Chose task to add" />
                                 {renderInput()}
                             </View>
-
                         </View>
-                       
                     </Modal>
-
                 </View>
             </View>
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container:{
-        alignItems: "center",
-        paddingTop: 80,
-        backgroundColor: "#000000",
-        paddingBottom: 20,
-    },
-
-    title:{
-        color: "#ffffff",
-        fontSize: 60,
-    },
-
-    mainView: {
-        flex: 1,
-        backgroundColor: "#ffffff",
-    }, 
-
-    addTask:{
-        flex: 1,
-        justifyContent: "flex-end",
-        alignItems: "center",
-        paddingBottom: 20,
-        color: "#ffffff",
-
-    },
-
-    button:{
-        backgroundColor: "#145c23ff",
-        width: 100, 
-        borderRadius:10,
-    }, 
-
-    modalBackground:{
-        flex: 1,
-        backgroundColor:"#ffffff"
-    },
-
-    modalHeader:{
-        flexDirection: "row",
-        justifyContent: "space-around",
-        alignItems: "center",
-        backgroundColor: "#ffffff",
-        paddingTop: 50,
-        paddingBottom: 20,
-        borderBottomWidth: 3,
-        marginLeft: 10,
-        marginRight: 10,
-        borderBottomColor: "#807b7bff", // färg på linjen
-    },
-
-    modalHeaderText:{
-        fontSize: 60,
-    },
-
-    modalBody:{
-        padding: 10,
-    },
-
-    input:{
-        marginTop: 10,
-        backgroundColor: "#d8d4d4ff",
-        color: "#000000",
-        padding: 10,
-        fontSize: 30,
-        borderRadius: 20,
-    },
-
-    time:{
-        height: 10,
-        marginTop: 10,
-        backgroundColor: "#000000",
-        borderRadius: 10, 
-        paddingLeft: 10,        
-    },
-
-    taskContainer:{
-        flexDirection: "row",
-        backgroundColor: "#273896ff",
-        margin: 10,
-        borderRadius: 10,
-        padding: 10
-    },
-
-    taskContainerTitle:{
-        color:"#ffffff",
-        fontSize: 20,
-        paddingBottom: 3,
-        borderBottomWidth: 2,
-        borderBottomColor: "#807b7bff", // färg på linjen
-
-    },
-
-    left:{
-        flex: 3,
-    },
-
-    
-    right:{
-        flexDirection: "row-reverse",
-        flex: 1,
-    },
-
-    taskContainerText:{
-        color: "#ffffff",
-        fontSize: 17
-    }
-})
