@@ -1,12 +1,14 @@
 import React, { useState} from 'react';
-import {View, Text, StyleSheet, Button, Modal, TouchableOpacity} from 'react-native';
+import {View, Text, Button, Modal, TouchableOpacity, ScrollView} from 'react-native';
 import styles from '@/style/style';
 
 import DropDownPicker from 'react-native-dropdown-picker';
 import Entypo from '@expo/vector-icons/Entypo';
+import { Feather } from '@expo/vector-icons';
 
 import GymInput from "../innerComponent/GymInput"
 import HandlaInput from '../innerComponent/HandlaInput';
+
 
 export default function CurrentList(){
 
@@ -15,13 +17,15 @@ export default function CurrentList(){
         whatToTrain : string,
         time : string,
         warmUp : string,
-        note : string
+        note : string;
+        checkedItems : boolean[]; //Läggs till för att TypeScript ska förstå att alla uppgifter har den egenskapen, behövs på alla
     }
 
     interface shoppingList{
         type : "ShoppingList",
         whatToGet : string,
         shoppingList : string;
+        checkedItems : boolean[];
     }
 
     const[modalVisible, setModalVisible] = useState(false);
@@ -62,7 +66,7 @@ export default function CurrentList(){
     }
 
     return(
-        <View style={styles.mainView}>
+        <ScrollView style={styles.mainView}>
             <View style={styles.container}>
                 <Text style={styles.title}>
                     To-Do List
@@ -90,11 +94,44 @@ export default function CurrentList(){
                         )
                     }
                     if(task.type === "ShoppingList"){
+                        let taskLine = task.shoppingList.split("\n");
                         return(
                             <View key={index} style={styles.taskContainer}>
                                 <View style={styles.left}>
                                     <Text style={styles.taskContainerTitle}>{task.type + " " + task.whatToGet} </Text>
-                                    <Text style={styles.taskContainerText}>{task.shoppingList}</Text>
+                                    
+                                        {taskLine.map((t, i) => (
+                                        <View  key={i} style={styles.shoppingListRow}> 
+
+                                            <TouchableOpacity
+                                                onPress={() => {
+                                                    //Säkerställer den task som ska uppdateras
+                                                    const newTasks = [...tasks]; //Ny array med samma element
+
+                                                    //Kollar om checkedItems finns på nuvarande uppgift
+                                                    if (task.checkedItems) {
+                                                        /** 
+                                                         * newTasks[index] => den uppgift som ska ändras
+                                                         * 
+                                                         * checkedItems![i] är non-null assertion operator => lovar att checkedItems inte är null elle rundefined
+                                                         * annars kan det vara undefined 
+                                                         * [i] => index för den specifika raden 
+                                                         * 
+                                                         * newTasks[index].checkedItems![i] = !newTasks[index].checkedItems![i]; => kan inte vara det värde som de redan är så byter
+                                                         * true => felse 
+                                                         * false => true
+                                                         */
+                                                    newTasks[index].checkedItems![i] = !newTasks[index].checkedItems![i];
+                                                    setTasks(newTasks);
+                                                    }
+                                                }}
+                                            >
+                                                {/*as keyof typeof Feather.glyphMap förklarar att det är av typen namn och inte en sträng*/}
+                                                <Feather name={(task.checkedItems && task.checkedItems[i] ? "check-circle" : "circle") as keyof typeof Feather.glyphMap} size={30} color="black" style={styles.shoppingListIcon}/>
+                                            </TouchableOpacity>
+                                            <Text style={styles.taskContainerText}>{t}</Text>
+                                        </View>
+                                        ))} 
                                 </View>
                                 <View style={styles.right}>
                                     <TouchableOpacity onPress={() => removeTask(index)}>
@@ -141,6 +178,6 @@ export default function CurrentList(){
                     </Modal>
                 </View>
             </View>
-        </View>
+        </ScrollView>
     )
 }

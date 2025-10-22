@@ -20,6 +20,7 @@ export default function HandlaInput({whatToGet, setWhatToGet, shoppingList, setS
         type : "ShoppingList",
         whatToGet : string,
         shoppingList : string;
+        checkedItems : Boolean[];
     }
 
     return(
@@ -35,7 +36,9 @@ export default function HandlaInput({whatToGet, setWhatToGet, shoppingList, setS
                         const newTask: shoppingList = {
                             type : "ShoppingList",
                             whatToGet : whatToGet,
-                            shoppingList : shoppingList
+                            shoppingList : shoppingList,
+                            checkedItems: shoppingList.split("\n").map(() => false)
+
                         }
                         setTasks([...tasks, newTask]);
                         setWhatToGet("");

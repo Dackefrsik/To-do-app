@@ -29,8 +29,6 @@ export default function GymInput({selectedTime , setModalVisible, setSelectedTas
         note: string;
     };
 
-    const router = useRouter();
-
     return(
         <>
             <TextInput placeholder='What to train' placeholderTextColor="#000000" style={styles.input} value={whatToTrain} onChangeText={setWhatToTrain}/>
@@ -61,4 +59,5 @@ export default function GymInput({selectedTime , setModalVisible, setSelectedTas
                 </View>
             </View>
         </>
-    )}
+    )
+}

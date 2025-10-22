@@ -106,6 +106,21 @@ const styles = StyleSheet.create({
     taskContainerText:{
         color: "#ffffff",
         fontSize: 17
+    },
+
+    shoppingListRow:{
+        flexDirection: "row",
+        alignItems: "center"
+    },
+    
+    checkShoppingList:{
+        opacity: 0.25,
+        marginRight: 5
+    },
+
+    shoppingListIcon:{
+        marginTop: 5,
+        marginRight: 5
     }
 })
 
