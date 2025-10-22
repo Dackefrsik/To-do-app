@@ -145,11 +145,10 @@ export default function CurrentList(){
             </View>
             <View style={styles.addTask}>
                 <View style={[styles.button]}>
-                    <Button color={"#ffffff"} onPress={() => {
+                    <TouchableOpacity  onPress={() => {
                         setModalVisible(true);
                     }} 
-                    title='Add task'
-                    />
+                    ><Text style={styles.addTaskText}>Add task</Text></TouchableOpacity>
                     <Modal
                     visible={modalVisible}
                     transparent={true}

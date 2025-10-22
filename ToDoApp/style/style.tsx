@@ -22,8 +22,10 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "flex-end",
         alignItems: "center",
+        paddingTop: 20,
         paddingBottom: 20,
         color: "#ffffff",
+
 
     },
 
@@ -31,7 +33,16 @@ const styles = StyleSheet.create({
         backgroundColor: "#145c23ff",
         width: 100, 
         borderRadius:10,
+        flex: 1,
+        alignItems: "center",
     }, 
+
+    addTaskText:{
+        color: "#ffffff",
+        padding: 7,
+        fontSize: 20,
+       
+    },
 
     modalBackground:{
         flex: 1,
