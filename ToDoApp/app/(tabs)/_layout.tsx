@@ -22,15 +22,14 @@ export default function TabLayout() {
         options={{
           title: 'CurrentList',
           tabBarIcon: ({color}) => <AntDesign name="unordered-list" size={28} color={color} />,
-      }} />
-      <Tabs.Screen
-        name="explore"
+      }} />w
+      <Tabs.Screen 
+        name='doneTasks'
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Done tasks',
+          tabBarIcon: ({ color }) => <AntDesign name="file-done" size={24} color={color} />,
         }}
       />
-      
-    </Tabs>
+      </Tabs>
   );
 }

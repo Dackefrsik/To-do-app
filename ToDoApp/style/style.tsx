@@ -26,14 +26,12 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
         color: "#ffffff",
 
-
     },
 
     button:{
         backgroundColor: "#145c23ff",
         width: 100, 
         borderRadius:10,
-        flex: 1,
         alignItems: "center",
     }, 
 
@@ -132,6 +130,11 @@ const styles = StyleSheet.create({
     shoppingListIcon:{
         marginTop: 5,
         marginRight: 5
+    }, 
+
+    doctorDropDownPicker:{
+        marginTop: 5,
+        zIndex: 1
     }
 })
 

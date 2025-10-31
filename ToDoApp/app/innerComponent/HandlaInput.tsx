@@ -1,27 +1,26 @@
-import { TextInput, View, Button, StyleSheet } from "react-native";
+import {useState} from "react";
+import { TextInput, View, Button } from "react-native";
 import styles from "@/style/style"
 
 
 type HandlaInputProps = {
-    whatToGet : string;
-    setWhatToGet : (whatToGet : string) => void;
-    shoppingList : string;
-    setShoppingList : (shoppingList : string) => void;
     setModalVisible : (modalVisible : boolean) => void;
     setSelectedTask : any;
     setTasks : (tasks : any[]) => void;
     tasks : any[];
-
 }
 
-export default function HandlaInput({whatToGet, setWhatToGet, shoppingList, setShoppingList, setModalVisible, setSelectedTask, setTasks, tasks} : HandlaInputProps){
+interface shoppingList {
+    type : "ShoppingList",
+    whatToGet : string,
+    shoppingList : string;
+    checkedItems : Boolean[];
+}
 
-        interface shoppingList {
-        type : "ShoppingList",
-        whatToGet : string,
-        shoppingList : string;
-        checkedItems : Boolean[];
-    }
+export default function HandlaInput({setModalVisible, setSelectedTask, setTasks, tasks} : HandlaInputProps){
+
+    const[whatToGet, setWhatToGet] = useState("");
+    const[shoppingList, setShoppingList] = useState("");
 
     return(
         <>

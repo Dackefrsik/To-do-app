@@ -1,5 +1,5 @@
-import React, { useState} from 'react';
-import {View, Text, Button, Modal, TouchableOpacity, ScrollView} from 'react-native';
+import React, {JSX, useState} from 'react';
+import {View, Text, Modal, TouchableOpacity, ScrollView} from 'react-native';
 import styles from '@/style/style';
 
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -8,25 +8,40 @@ import { Feather } from '@expo/vector-icons';
 
 import GymInput from "../innerComponent/GymInput"
 import HandlaInput from '../innerComponent/HandlaInput';
+import DoctorInput from "../innerComponent/DoctorInput";
 
+interface Gym{
+    type : "Gym",
+    whatToTrain : string,
+    time : string,
+    warmUp : string,
+    note : string;
+    checkedItems : boolean[]; //Läggs till för att TypeScript ska förstå att alla uppgifter har den egenskapen, behövs på alla
+}
+
+interface shoppingList{
+    type : "ShoppingList",
+    whatToGet : string,
+    shoppingList : string;
+    checkedItems : boolean[];
+}
+
+interface Doctor{
+    type : "Doctor",
+    typeOfDoctor : string,
+    time : string,
+    adress : string,
+    note : string,
+    checkedItems : boolean[]; 
+}
+
+interface taskInputMap{
+    Gym : JSX.Element,
+    Handla : JSX.Element,
+    Doctor : JSX.Element,
+}
 
 export default function CurrentList(){
-
-    interface Gym{
-        type : "Gym",
-        whatToTrain : string,
-        time : string,
-        warmUp : string,
-        note : string;
-        checkedItems : boolean[]; //Läggs till för att TypeScript ska förstå att alla uppgifter har den egenskapen, behövs på alla
-    }
-
-    interface shoppingList{
-        type : "ShoppingList",
-        whatToGet : string,
-        shoppingList : string;
-        checkedItems : boolean[];
-    }
 
     const[modalVisible, setModalVisible] = useState(false);
     const[open, setOpen] = useState(false)
@@ -34,35 +49,45 @@ export default function CurrentList(){
     const[items, setItems] = useState([
         {label : "Gym", value : "Gym"},
         {label : "Handla", value : "Handla"},
+        {label : "Läkare", value : "Doctor" }
+
     ]);
     const[selectedTime, selectTime] = useState(new Date());
+    const[tasks, setTasks] = useState<(Gym | shoppingList | Doctor)[]>([]);
 
-    const[tasks, setTasks] = useState<(Gym | shoppingList)[]>([]);
-
-    const[whatToTrain, setWhatToTrain] = useState("");
-    const[warmUp, setWarmup] = useState("");
     const[note, setNote] = useState("");
 
-    const[whatToGet, setWhatToGet] = useState("");
-    const[shoppingList, setShoppingList] = useState("");
-
+    const taskComponents: taskInputMap = {
+       Gym : <GymInput selectedTime={selectedTime} setModalVisible={setModalVisible} setSelectedTask={setSelectedTask} setTasks={setTasks} tasks={tasks} setNote={setNote}             
+        note={note} />,
+        Handla  : <HandlaInput setModalVisible={setModalVisible} setSelectedTask={setSelectedTask} setTasks={setTasks} tasks={tasks}/>,
+        Doctor : <DoctorInput setModalVisible={setModalVisible} setSelectedTask={selectedTask} setTasks={setTasks} tasks={tasks}/>
+    }
    const renderInput = () => {
-        if(selectedTask === "Gym"){
-            return(
-                    <GymInput selectedTime={selectedTime} setModalVisible={setModalVisible} setSelectedTask={setSelectedTask} setTasks={setTasks} tasks={tasks} setWhatToTrain={setWhatToTrain} setNote={setNote} setWarmup={setWarmup} whatToTrain={whatToTrain}   // <-- Lägg till denna rad
-    warmUp={warmUp}             
-    note={note} />
-            )
+
+        if(selectedTask){
+            //taskComponent är ett object basserat på taskInputMap
+            return Object.entries(taskComponents).map(([taskType, Component]) => {
+                // [taskType] är strängen "Gym" eller "shoppingList"
+                // [Component] är själva JSX.Element (<GymInput.../>)
+                if(taskType === selectedTask)
+                return (
+                    // Du måste ge det yttre elementet en unik key
+                    <View key={taskType}> 
+                        {Component}
+                    </View>
+                );
+            });
         }
-        else if(selectedTask === "Handla"){
-            return(
-                <HandlaInput whatToGet={whatToGet} setWhatToGet={setWhatToGet} shoppingList={shoppingList} setShoppingList={setShoppingList} setModalVisible={setModalVisible} setSelectedTask={setSelectedTask} setTasks={setTasks} tasks={tasks}/>                
-            )
-        }
+        
+
+    // Returnera null eller något annat om ingen matchning hittades
+    return null;
     }
 
     function removeTask(index : number){
-        setTasks(pervTask => pervTask.filter((_, i) => i !== index))
+
+        setTasks(pervTask => pervTask.filter((_, i) => i !== index));
     }
 
     return(
@@ -81,7 +106,7 @@ export default function CurrentList(){
                                     <Text style={styles.taskContainerTitle}>{task.type}</Text>
                                     <Text style={styles.taskContainerText} >Muscle Group: {task.whatToTrain}</Text>
                                     <Text style={styles.taskContainerText} >Tid: {task.time.slice(0,5)}</Text>
-                                    {task.warmUp && (<Text style={styles.taskContainerText} >Warmup{task.warmUp}</Text>)}
+                                    {task.warmUp && (<Text style={styles.taskContainerText} >Warmup: {task.warmUp}</Text>)}
                                     {task.note && (<Text style={styles.taskContainerText} >{task.note}</Text>)}
                                 </View>
                                 <View style={styles.right}>

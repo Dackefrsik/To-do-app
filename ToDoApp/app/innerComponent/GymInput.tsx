@@ -1,8 +1,8 @@
+import { useState } from "react";
 import { TextInput, View, Button} from "react-native";
 import styles from '@/style/style';
 
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { useRouter } from "expo-router";
 
 type GymInputProps = {
     selectedTime: Date;
@@ -10,24 +10,23 @@ type GymInputProps = {
     setSelectedTask: any;
     setTasks: (tasks: any[]) => void;
     tasks: any[];
-    setWhatToTrain: (val: string) => void;
     setNote: (val: string) => void;
-    setWarmup: (val: string) => void;
+    note: string;
+};
+
+type Gym = {
+    type: "Gym";
     whatToTrain: string;
+    time: string;
     warmUp: string;
     note: string;
 };
 
+export default function GymInput({selectedTime , setModalVisible, setSelectedTask, setTasks, tasks, setNote, note} : GymInputProps){
 
-export default function GymInput({selectedTime , setModalVisible, setSelectedTask, setTasks, tasks, setWhatToTrain, setNote, setWarmup, whatToTrain, warmUp, note} : GymInputProps){
-
-    type Gym = {
-        type: "Gym";
-        whatToTrain: string;
-        time: string;
-        warmUp: string;
-        note: string;
-    };
+    const[whatToTrain, setWhatToTrain] = useState("");
+    const[warmUp, setWarmup] = useState("");
+    
 
     return(
         <>
