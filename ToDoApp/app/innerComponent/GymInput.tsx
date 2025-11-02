@@ -20,6 +20,8 @@ type Gym = {
     time: string;
     warmUp: string;
     note: string;
+    index : number 
+
 };
 
 export default function GymInput({selectedTime , setModalVisible, setSelectedTask, setTasks, tasks, setNote, note} : GymInputProps){
@@ -47,7 +49,8 @@ export default function GymInput({selectedTime , setModalVisible, setSelectedTas
                             whatToTrain :  whatToTrain,
                             time : selectedTime.toLocaleTimeString(),
                             warmUp : warmUp,
-                            note : note
+                            note : note,
+                            index : tasks.length 
                         };
                         setTasks([...tasks, newTask]);
                         setWhatToTrain("");

@@ -1,5 +1,7 @@
-import { Tabs } from 'expo-router';
+import { Stack, Tabs } from 'expo-router';
 import React from 'react';
+
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
@@ -11,7 +13,8 @@ export default function TabLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <Tabs
+    <GestureHandlerRootView style={{ flex: 1 }}>
+          <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
@@ -22,14 +25,9 @@ export default function TabLayout() {
         options={{
           title: 'CurrentList',
           tabBarIcon: ({color}) => <AntDesign name="unordered-list" size={28} color={color} />,
-      }} />w
-      <Tabs.Screen 
-        name='doneTasks'
-        options={{
-          title: 'Done tasks',
-          tabBarIcon: ({ color }) => <AntDesign name="file-done" size={24} color={color} />,
-        }}
-      />
+      }} />
       </Tabs>
+    </GestureHandlerRootView>
+  
   );
 }

@@ -17,7 +17,8 @@ interface Doctor{
     typeOfDoctor : string,
     time : string,
     adress : string,
-    note : string 
+    note : string, 
+    index : number 
 }
 
 export default function DocotorInput({setModalVisible, setSelectedTask, setTasks, tasks} : DoctorProps){
@@ -54,14 +55,15 @@ export default function DocotorInput({setModalVisible, setSelectedTask, setTasks
             <View style={[styles.addTask , {marginTop: 50}]}>
                 <View style={[styles.button, {height : 40}]}>
                 <Button color={"#ffffff"} title='Add task' onPress={() => { 
-                                    setModalVisible(false) 
-                                    setSelectedTask(null)
+                                    setModalVisible(false); 
+                                    setSelectedTask(null);
                                     const newTask: Doctor = {
                                         type : "Doctor",
                                         typeOfDoctor :  doctor,
                                         time : selectedTime.toLocaleTimeString(),
                                         adress : adress,
-                                        note : note
+                                        note : note,
+                                        index : tasks.length 
                                     };
                                     setTasks([...tasks, newTask]);
                                     setNote("");

@@ -19,13 +19,13 @@ const styles = StyleSheet.create({
     }, 
 
     addTask:{
-        flex: 1,
         justifyContent: "flex-end",
         alignItems: "center",
         paddingTop: 20,
         paddingBottom: 20,
         color: "#ffffff",
-
+        height: 100
+        
     },
 
     button:{
@@ -103,13 +103,19 @@ const styles = StyleSheet.create({
     },
 
     left:{
-        flex: 3,
+        flex: 10,
     },
 
     
     right:{
-        flexDirection: "row-reverse",
+        justifyContent: "flex-end",
         flex: 1,
+    },
+
+    innerRight:{
+        flexDirection: "column",
+        flex: 1,
+        justifyContent: "space-between"
     },
 
     taskContainerText:{
@@ -135,7 +141,14 @@ const styles = StyleSheet.create({
     doctorDropDownPicker:{
         marginTop: 5,
         zIndex: 1
+    },
+
+    dragView:{
+        paddingTop: 10,
+        marginBottom: 10,
+        flex: 1
     }
+
 })
 
 

@@ -15,6 +15,7 @@ interface shoppingList {
     whatToGet : string,
     shoppingList : string;
     checkedItems : Boolean[];
+    index : number
 }
 
 export default function HandlaInput({setModalVisible, setSelectedTask, setTasks, tasks} : HandlaInputProps){
@@ -36,7 +37,8 @@ export default function HandlaInput({setModalVisible, setSelectedTask, setTasks,
                             type : "ShoppingList",
                             whatToGet : whatToGet,
                             shoppingList : shoppingList,
-                            checkedItems: shoppingList.split("\n").map(() => false)
+                            checkedItems: shoppingList.split("\n").map(() => false),
+                            index : tasks.length
 
                         }
                         setTasks([...tasks, newTask]);
