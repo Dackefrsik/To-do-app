@@ -9,6 +9,8 @@ import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
+import styles from "../../style/style";
+
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
@@ -16,15 +18,16 @@ export default function TabLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
           <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: "#E5E7EB",
         headerShown: false,
         tabBarButton: HapticTab,
+        tabBarStyle: styles.navbar
       }}>
       <Tabs.Screen
         name='index'
         options={{
           title: 'CurrentList',
-          tabBarIcon: ({color}) => <AntDesign name="unordered-list" size={28} color={color} />,
+          tabBarIcon: ({color}) => <AntDesign name="unordered-list" size={28} color={color} style={styles.navButtonColor} />,
       }} />
       </Tabs>
     </GestureHandlerRootView>

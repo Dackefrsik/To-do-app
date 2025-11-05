@@ -1,5 +1,5 @@
 import React, {JSX, useState} from 'react';
-import {View, Text, Modal, TouchableOpacity, ScrollView} from 'react-native';
+import {View, Text, Modal, TouchableOpacity} from 'react-native';
 import DraggableFlatList, {RenderItemParams, ScaleDecorator } from "react-native-draggable-flatlist";
 import styles from '@/style/style';
 
