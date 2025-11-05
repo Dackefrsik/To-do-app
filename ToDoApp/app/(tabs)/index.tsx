@@ -1,4 +1,4 @@
-import React, {JSX, useState} from 'react';
+import React, {JSX, useState, useRef} from 'react';
 import {View, Text, Modal, TouchableOpacity} from 'react-native';
 import DraggableFlatList, {RenderItemParams, ScaleDecorator } from "react-native-draggable-flatlist";
 import styles from '@/style/style';
@@ -12,6 +12,10 @@ import GymInput from "../innerComponent/GymInput"
 import HandlaInput from '../innerComponent/HandlaInput';
 import DoctorInput from "../innerComponent/DoctorInput";
 
+//AsyncStorage för att spara data om tasks
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+//#region interfaces och types
 interface Gym{
     type : "Gym",
     whatToTrain : string,
@@ -46,9 +50,12 @@ interface taskInputMap{
     Doctor : JSX.Element,
 }
 
+type TaskItems = Gym | shoppingList | Doctor;
+//#endregion
 
 export default function CurrentList(){
-
+    
+    //#region useStates
     const[modalVisible, setModalVisible] = useState(false);
     const[open, setOpen] = useState(false)
     const[selectedTask, setSelectedTask] = useState(null);
@@ -59,17 +66,24 @@ export default function CurrentList(){
 
     ]);
     const[selectedTime, selectTime] = useState(new Date());
-    const[tasks, setTasks] = useState<(Gym | shoppingList | Doctor)[]>([]);
+    const[tasks, setTasks] = useState<(TaskItems)[]>([]);
 
     const[note, setNote] = useState("");
+    //#endregion
 
+    //Använd useRef för att ignorera första gången effekten körs
+    //Hoppar över första tillståndet innan den läser det sparade i AsyncStorage
+    const isFirstRun = useRef(true);
+
+    //#region Rendering av inputs 
     const taskComponents: taskInputMap = {
        Gym : <GymInput selectedTime={selectedTime} setModalVisible={setModalVisible} setSelectedTask={setSelectedTask} setTasks={setTasks} tasks={tasks} setNote={setNote}             
         note={note} />,
         Handla  : <HandlaInput setModalVisible={setModalVisible} setSelectedTask={setSelectedTask} setTasks={setTasks} tasks={tasks}/>,
         Doctor : <DoctorInput setModalVisible={setModalVisible} setSelectedTask={setSelectedTask} setTasks={setTasks} tasks={tasks}/>
     }
-   const renderInput = () => {
+    
+    const renderInput = () => {
 
         if(selectedTask){
             //taskComponent är ett object basserat på taskInputMap
@@ -90,13 +104,68 @@ export default function CurrentList(){
     // Returnera null eller något annat om ingen matchning hittades
     return null;
     }
+    //#endregion
 
+    //#region remove inputs
     function removeTask(taskToRemove : Gym | shoppingList | Doctor){
 
         setTasks(prevTasks => prevTasks.filter(task => task.index !== taskToRemove.index));
-    
     }
+    //#endregion
 
+    //#region funktioner för AsyncsStorage
+    const TASKS_KEY = '@tasks_key';
+    
+    //Spara tasks
+    React.useEffect(() => {
+
+        //Undviker att vi de ursprungliga tillståndet skriver över dem
+        if (isFirstRun.current) {
+            isFirstRun.current = false; // Ställ in till false för framtida körningar
+            return; // Hoppa över sparandet
+        }   
+
+
+        const saveTasks = async () => {
+            try{
+                const jsonValue = JSON.stringify(tasks); //Sätter tasks som json-värde
+                await AsyncStorage.setItem(TASKS_KEY, jsonValue); //Sparar de tidigare som sparats i AsyncsStorage
+
+                console.log("Tasks sparade!");
+            }
+            catch(error) {
+                console.log("Fel uppstod vid försök att spara tasks: ", error);
+            }
+        }
+
+        saveTasks();
+    },[tasks]); //Körs varje gång tasks uppdateras
+
+    //Läsa in sparade tasks
+    React.useEffect(() => {
+        const loadTasks = async () => {
+            try{
+                const jsonValue = await AsyncStorage.getItem(TASKS_KEY); //Hämtar innehållet med hjälp av TASK_KEY
+                console.log("Hämtat (Rådata):", jsonValue); // Lägg till denna logg!
+
+                //Kontrollerar så at inte det hämtade värdet är null
+                if(jsonValue != null){
+
+                    //Parsar de hämtade värdena och sparar dem i tasks 
+                    const loadedTasks : (TaskItems)[] = JSON.parse(jsonValue);
+                    setTasks(loadedTasks);
+
+                    console.log("Lyckades hämta tasks");
+                }
+            }
+            catch(error){
+                console.log("Fel vid laddning av tasks: ", error);
+            }
+        }
+        
+        loadTasks();
+    }, []); //Körs en gång när appen startas
+    //#endregion
 
     return(
         <View style={styles.mainView}>
@@ -106,7 +175,7 @@ export default function CurrentList(){
                 </Text>
             </View>
             <View style={styles.dragView}>
-                <DraggableFlatList<Gym | shoppingList | Doctor>
+                <DraggableFlatList<TaskItems>
                     data={tasks} //Datan som ska skrivas ut
                     keyExtractor={(item, index) => index.toString()} //Levererar en unik nyckel till varje rad
 
@@ -114,7 +183,7 @@ export default function CurrentList(){
                     onDragEnd={({data}) => { 
                       setTasks(data)
                     }}
-                    renderItem={({item , drag} : RenderItemParams<Gym | shoppingList | Doctor>) => (
+                    renderItem={({item , drag} : RenderItemParams<TaskItems>) => (
                         <ScaleDecorator>
                             <View >
                                 {item.type === "Gym" && (

@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         paddingBottom: 3,
         borderBottomWidth: 2,
-        borderBottomColor: primaryColor, // färg på linjen
+        borderBottomColor: secondaryColor, // färg på linjen
 
     },
 
