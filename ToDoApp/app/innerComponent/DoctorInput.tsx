@@ -7,6 +7,8 @@ import { TextInput, View, Button} from "react-native"
 
 import { Doctor } from "../(tabs)"
 
+import Address from "./Address";
+
 interface DoctorProps {
     setModalVisible : (visible: boolean) => void,
     setSelectedTask : any,
@@ -43,7 +45,7 @@ export default function DocotorInput({setModalVisible, setSelectedTask, setTasks
                 value={selectedTime} mode='time' 
                 is24Hour={true} 
                 display='default'/>
-            <TextInput style={styles.input} placeholder="Adress" value={address} onChangeText={setAddress}></TextInput>
+            <Address address={address} setAddress={setAddress}/>
             <TextInput style={styles.input} placeholder="Note" value={note} onChangeText={setNote}></TextInput>
             <View style={[styles.addTask , {marginTop: 50}]}>
                 <View style={[styles.button, {height : 40}]}>

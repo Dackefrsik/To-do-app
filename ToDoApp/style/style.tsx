@@ -172,6 +172,27 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         marginBottom: 10,
         flex: 1
+    },
+
+    addressExampelBackgroudn:{
+        backgroundColor : secondaryColor,
+        borderRadius : 15,
+        marginTop : 3,
+        position : "absolute",
+        top : 165,
+        left : 0,
+        right : 0,
+        zIndex: 10
+    },
+
+    adressExampel:{
+        color : textColor,
+        fontFamily : fontText,
+        fontSize : 15,
+        marginTop : 3,
+        marginLeft : 3,
+        padding : 5,
+        zIndex: 0
     }
 
 })
