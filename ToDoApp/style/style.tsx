@@ -1,11 +1,13 @@
 import { StyleSheet } from "react-native";
 
+//Variabler för färger
 const backgroundColor = "#F9FAFB";
 const primaryColor = "#3B82F6";
 const secondaryColor = "#E5E7EB";
 const textColor = "#111827";
 const done = "#10B981";
 
+//Variabler för fontstilar
 const fontTitle = "Inter Bold";
 const fontText = "Inter Regular";
 

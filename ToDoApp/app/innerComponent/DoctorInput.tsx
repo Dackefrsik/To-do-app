@@ -5,6 +5,8 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import styles from "@/style/style"
 import { TextInput, View, Button} from "react-native"
 
+import { Doctor } from "../(tabs)"
+
 interface DoctorProps {
     setModalVisible : (visible: boolean) => void,
     setSelectedTask : any,
@@ -12,14 +14,14 @@ interface DoctorProps {
     tasks : any[],
 }
 
-interface Doctor{
+/* interface Doctor{
     type : string,
     typeOfDoctor : string,
     time : string,
-    adress : string,
+    address : string,
     note : string, 
     index : number 
-}
+} */
 
 export default function DocotorInput({setModalVisible, setSelectedTask, setTasks, tasks} : DoctorProps){
 
@@ -32,7 +34,7 @@ export default function DocotorInput({setModalVisible, setSelectedTask, setTasks
 
     ])
     
-    const[adress, setAdress] = useState("");
+    const[address, setAddress] = useState("");
     const[note, setNote] = useState("");
     const[selectedTime, selectTime] = useState(new Date());
 
@@ -50,18 +52,18 @@ export default function DocotorInput({setModalVisible, setSelectedTask, setTasks
                 value={selectedTime} mode='time' 
                 is24Hour={true} 
                 display='default'/>
-            <TextInput style={styles.input} placeholder="Adress" value={adress} onChangeText={setAdress}></TextInput>
+            <TextInput style={styles.input} placeholder="Adress" value={address} onChangeText={setAddress}></TextInput>
             <TextInput style={styles.input} placeholder="Note" value={note} onChangeText={setNote}></TextInput>
             <View style={[styles.addTask , {marginTop: 50}]}>
                 <View style={[styles.button, {height : 40}]}>
                 <Button color={"#ffffff"} title='Add task' onPress={() => { 
                                     setModalVisible(false); 
                                     setSelectedTask(null);
-                                    const newTask: Doctor = {
+                                    const newTask : Doctor = {
                                         type : "Doctor",
                                         typeOfDoctor :  doctor,
                                         time : selectedTime.toLocaleTimeString(),
-                                        adress : adress,
+                                        address : address,
                                         note : note,
                                         index : tasks.length 
                                     };

@@ -5,18 +5,17 @@ import styles from '@/style/style';
 
 import DropDownPicker from 'react-native-dropdown-picker';
 import Entypo from '@expo/vector-icons/Entypo';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { Feather } from '@expo/vector-icons';
 
 import GymInput from "../innerComponent/GymInput"
 import HandlaInput from '../innerComponent/HandlaInput';
 import DoctorInput from "../innerComponent/DoctorInput";
+import Tasks from "../innerComponent/Tasks";
 
 //AsyncStorage för att spara data om tasks
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //#region interfaces och types
-interface Gym{
+export interface Gym{
     type : "Gym",
     whatToTrain : string,
     time : string,
@@ -26,7 +25,7 @@ interface Gym{
     index : number
 }
 
-interface shoppingList{
+export interface shoppingList{
     type : "ShoppingList",
     whatToGet : string,
     shoppingList : string;
@@ -34,13 +33,13 @@ interface shoppingList{
     index : number
 }
 
-interface Doctor{
+export interface Doctor{
     type : "Doctor",
     typeOfDoctor : string,
     time : string,
-    adress : string,
+    address : string,
     note : string,
-    checkedItems : boolean[],
+    /* checkedItems : boolean[], */
     index : number
 }
 
@@ -50,7 +49,7 @@ interface taskInputMap{
     Doctor : JSX.Element,
 }
 
-type TaskItems = Gym | shoppingList | Doctor;
+export type TaskItems = Gym | shoppingList | Doctor;
 //#endregion
 
 export default function CurrentList(){
@@ -185,109 +184,9 @@ export default function CurrentList(){
                     }}
                     renderItem={({item , drag} : RenderItemParams<TaskItems>) => (
                         <ScaleDecorator>
-                            <View >
-                                {item.type === "Gym" && (
-                                        <View style={styles.taskContainer} >
-                                            <View style={styles.left} >
-                                                <Text style={styles.taskContainerTitle}>{item.type}</Text>
-                                                <Text style={styles.taskContainerText} >Muscle Group: {item.whatToTrain}</Text>
-                                                <Text style={styles.taskContainerText} >Tid: {item.time.slice(0,5)}</Text>
-                                                {item.warmUp && (<Text style={styles.taskContainerText} >Warmup: {item.warmUp}</Text>)}
-                                                {item.note && (<Text style={styles.taskContainerText} >{item.note}</Text>)}
-                                            </View>
-                                            <View style={styles.right} >
-                                                <View style={styles.innerRight}>
-                                                    <TouchableOpacity onPress={() => removeTask(item)}>
-                                                        <Entypo name="circle" size={24} color="white" />
-                                                    </TouchableOpacity>
-                                                    <View onTouchStart={drag}>
-                                                        <MaterialIcons name="drag-handle" size={24} color="white" />
-                                                    </View>
-                                                </View>
-                                            </View>
-                                        </View>
-                                        
-                                    )
-                                }
-                                {item.type === "ShoppingList" && (
-                                        <View style={styles.taskContainer}>
-                                            <View style={styles.left}>
-                                                <Text style={styles.taskContainerTitle}>{item.type + " " + item.whatToGet}</Text>
-                                                
-                                                    {item.shoppingList.split("\n").map((t : string, i : number) => (
-                                                    <View  key={i} style={styles.shoppingListRow}> 
-
-                                                        <TouchableOpacity
-                                                            onPress={() => {
-                                                                //Säkerställer den task som ska uppdateras
-                                                                const newTasks = [...tasks]; //Ny array med samma element
-
-                                                                //Kollar om checkedItems finns på nuvarande uppgift
-                                                                if (item.checkedItems) {
-                                                                    /** 
-                                                                     * newTasks[index] => den uppgift som ska ändras
-                                                                     * 
-                                                                     * checkedItems![i] är non-null assertion operator => lovar att checkedItems inte är null elle rundefined
-                                                                     * annars kan det vara undefined 
-                                                                     * [i] => index för den specifika raden 
-                                                                     * 
-                                                                     * newTasks[index].checkedItems![i] = !newTasks[index].checkedItems![i]; => kan inte vara det värde som de redan är så byter
-                                                                     * true => felse 
-                                                                     * false => true
-                                                                     */
-                                                                newTasks[i].checkedItems![i] = !newTasks[i].checkedItems![i];
-                                                                setTasks(newTasks);
-                                                                }
-                                                            }}
-                                                        >
-                                                            {/*as keyof typeof Feather.glyphMap förklarar att det är av typen namn och inte en sträng*/}
-                                                            <Feather name={(item.checkedItems && item.checkedItems[i] ? "check-circle" : "circle") as keyof typeof Feather.glyphMap} size={30} color="black" style={styles.shoppingListIcon}/>
-                                                        </TouchableOpacity>
-                                                        <Text style={styles.taskContainerText}>{t}</Text>
-                                                    </View>
-                                                    ))} 
-                                            </View>
-                                            <View style={styles.right} onTouchStart={drag}>
-                                                <View style={styles.innerRight}>
-                                                    <TouchableOpacity onPress={() => removeTask(item)}>
-                                                        <Entypo name="circle" size={24} color="white" />
-                                                    </TouchableOpacity>
-                                                    <View onTouchStart={drag}>
-                                                        <MaterialIcons name="drag-handle" size={24} color="white" />
-                                                    </View>
-                                                </View>
-                                            </View>
-                                        </View>
-                                    )
-                                }
-                                {item.type === "Doctor" && (
-                                    
-                                        <View style={styles.taskContainer}>
-                                            <View style={styles.left}>
-                                                <Text style={styles.taskContainerTitle}>Läkarbesök</Text>
-                                                <Text style={styles.taskContainerText}>{item.typeOfDoctor}</Text>
-                                                <Text style={styles.taskContainerText} >Tid: {item.time.slice(0,5)}</Text>
-                                                <Text style={styles.taskContainerText}>Adress: {item.adress}</Text>
-                                                <Text style={styles.taskContainerText}>{item.note}</Text>
-                                            </View>
-                                            <View style={styles.right} onTouchStart={drag}>
-                                                <View style={styles.innerRight}>
-
-                                                    <TouchableOpacity onPress={() => removeTask(item)}>
-                                                        <Entypo name="circle" size={24} color="white" />
-                                                    </TouchableOpacity>
-                                                    <View onTouchStart={drag}>
-                                                        <MaterialIcons name="drag-handle" size={24} color="white" />
-                                                    </View>
-                                                </View>
-                                            </View>
-                                        </View>
-                                    )
-                                }
-                                </View>
+                                <Tasks item={item} drag={drag} removeTask={removeTask} setTasks={setTasks} tasks={tasks}/>
                         </ScaleDecorator>
                     )}
-
                 />
                 
             </View>
