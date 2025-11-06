@@ -21,7 +21,6 @@ export interface Gym{
     time : string,
     warmUp : string,
     note : string;
-    checkedItems : boolean[], //Läggs till för att TypeScript ska förstå att alla uppgifter har den egenskapen, behövs på alla
     index : number
 }
 
@@ -39,7 +38,6 @@ export interface Doctor{
     time : string,
     address : string,
     note : string,
-    /* checkedItems : boolean[], */
     index : number
 }
 

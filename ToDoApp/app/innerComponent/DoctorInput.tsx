@@ -14,15 +14,6 @@ interface DoctorProps {
     tasks : any[],
 }
 
-/* interface Doctor{
-    type : string,
-    typeOfDoctor : string,
-    time : string,
-    address : string,
-    note : string, 
-    index : number 
-} */
-
 export default function DocotorInput({setModalVisible, setSelectedTask, setTasks, tasks} : DoctorProps){
 
     const[open, setOpen] = useState(false)

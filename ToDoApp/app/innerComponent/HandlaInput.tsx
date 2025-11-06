@@ -2,20 +2,13 @@ import {useState} from "react";
 import { TextInput, View, Button } from "react-native";
 import styles from "@/style/style"
 
+import { shoppingList } from "../(tabs)";
 
 type HandlaInputProps = {
     setModalVisible : (modalVisible : boolean) => void;
     setSelectedTask : any;
     setTasks : (tasks : any[]) => void;
     tasks : any[];
-}
-
-interface shoppingList {
-    type : "ShoppingList",
-    whatToGet : string,
-    shoppingList : string;
-    checkedItems : Boolean[];
-    index : number
 }
 
 export default function HandlaInput({setModalVisible, setSelectedTask, setTasks, tasks} : HandlaInputProps){

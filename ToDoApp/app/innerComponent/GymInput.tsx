@@ -4,6 +4,8 @@ import styles from '@/style/style';
 
 import DateTimePicker from "@react-native-community/datetimepicker";
 
+import { Gym } from "../(tabs)"
+
 type GymInputProps = {
     selectedTime: Date;
     setModalVisible: (visible: boolean) => void;
@@ -14,15 +16,7 @@ type GymInputProps = {
     note: string;
 };
 
-type Gym = {
-    type: "Gym";
-    whatToTrain: string;
-    time: string;
-    warmUp: string;
-    note: string;
-    index : number 
 
-};
 
 export default function GymInput({selectedTime , setModalVisible, setSelectedTask, setTasks, tasks, setNote, note} : GymInputProps){
 

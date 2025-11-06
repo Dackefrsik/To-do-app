@@ -61,28 +61,35 @@ export default function Tasks({item, drag, removeTask, setTasks, tasks} : taskPr
 
                                         <TouchableOpacity
                                             onPress={() => {
-                                                //Säkerställer den task som ska uppdateras
+                                            console.log("press");
 
-                                                //Kollar om checkedItems finns på nuvarande uppgift
-                                                if (item.checkedItems) {
-                                                    const newTasks = [...tasks]; // kopia av arrayen
+                                                // Hitta index för tasken i state-arrayen
+                                                const taskIndex = tasks.findIndex(t => t.index === item.index);
+                                                if (taskIndex === -1) return;
 
-                                                    // Hitta den aktuella uppgiftens index i tasks
-                                                    const taskIndex = newTasks.findIndex(t => t.index === item.index);
-                                                    const updatedChecked = [...(newTasks[taskIndex].checkedItems || [])];
+                                                // Skapa kopia av tasks för immutability
+                                                const newTasks = [...tasks];
+                                                const currentTask = newTasks[taskIndex];
 
-                                                    // Toggla just det elementet
-                                                    updatedChecked[i] = !updatedChecked[i];
+                                                // Säkerställ att checkedItems finns och är rätt längd
+                                                const shoppingRows = currentTask.shoppingList.split("\n").length;
+                                                const updatedChecked = currentTask.checkedItems
+                                                    ? [...currentTask.checkedItems]
+                                                    : Array(shoppingRows).fill(false);
 
-                                                    // Spara tillbaka till rätt task
-                                                    newTasks[taskIndex] = {
-                                                        ...newTasks[taskIndex],
-                                                        checkedItems: updatedChecked,
-                                                    };
-                                                    setTasks(newTasks);
-                                                }
+                                                // Toggla den aktuella raden
+                                                updatedChecked[i] = !updatedChecked[i];
+
+                                                // Uppdatera tasken i kopian
+                                                newTasks[taskIndex] = {
+                                                    ...currentTask,
+                                                    checkedItems: updatedChecked,
+                                                };
+
+                                                // Uppdatera state
+                                                setTasks(newTasks);
                                             }}
-                                        >
+                                            >
                                             {/*as keyof typeof Feather.glyphMap förklarar att det är av typen namn och inte en sträng*/}
                                             <Feather name={(item.checkedItems && item.checkedItems[i] ? "check-circle" : "circle") as keyof typeof Feather.glyphMap} size={30} color="black" style={styles.shoppingListIcon}/>
                                         </TouchableOpacity>
